@@ -1,0 +1,7 @@
+Cython
+Jinja2
+ccdproc
+numpy<1.7.0
+progressbar
+git+https://github.com/astrofrog/reproject.git
+bottleneck
