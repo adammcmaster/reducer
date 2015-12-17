@@ -7,3 +7,7 @@ ADD requirements.txt /
 
 RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/astopy/astropy.git@wcslib-5.11
+
+ADD reduce.py /
+
+ENTRYPOINT [ "/usr/bin/python", "/reduce.py" ]
