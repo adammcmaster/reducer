@@ -19,6 +19,10 @@ ADD requirements.txt /
 
 RUN pip install -r requirements.txt
 
-ADD reduce.py /
+WORKDIR /src
 
-ENTRYPOINT [ "/usr/bin/python", "/reduce.py" ]
+ADD reduce.py /src/
+ADD main.py /src/
+ADD tile.py /src/
+
+ENTRYPOINT [ "/src/main.py" ]
