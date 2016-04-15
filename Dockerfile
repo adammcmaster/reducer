@@ -1,12 +1,23 @@
 FROM ubuntu:14.04
 
-RUN apt-get update && apt-get install -y python-pip python-dev liblapack3 \
-        liblapack-dev git gfortran
+RUN apt-get update && \
+    apt-get build-dep -y python-numpy python-scipy && \
+    apt-get install -y \
+        python-pip \
+        python-dev \
+        liblapack3 \
+        liblapack-dev \
+        libatlas-dev \
+        libatlas3-base \
+        libblas3 \
+        libblas-dev \
+        git \
+        gfortran && \
+    rm -rf /var/lib/apt/lists/*
 
 ADD requirements.txt /
 
 RUN pip install -r requirements.txt
-RUN pip install git+https://github.com/astopy/astropy.git@wcslib-5.11
 
 ADD reduce.py /
 
