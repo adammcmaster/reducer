@@ -49,6 +49,14 @@ class Tiler:
     def _add_hdu(self, hdu):
         data_range = self._parse_datarange(hdu.header['DATASEC'])
         combined_range = self._parse_datarange(hdu.header['DETSEC'])
-        for in_row, out_row in zip(range(*data_range[1]), range(*combined_range[1])):
-            for in_col, out_col in zip(range(*data_range[0]), range(*combined_range[0])):
-                self.combined_data[out_row-1][out_col-1] = hdu.data[in_row-1][in_col-1]
+        for in_row, out_row in zip(
+            range(*data_range[1]),
+            range(*combined_range[1])
+        ):
+            for in_col, out_col in zip(
+                range(*data_range[0]),
+                range(*combined_range[0])
+            ):
+                self.combined_data[out_row-1][out_col-1] = (
+                    hdu.data[in_row-1][in_col-1]
+                )
