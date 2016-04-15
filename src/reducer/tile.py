@@ -47,6 +47,7 @@ class Tiler:
         )
 
     def _add_hdu(self, hdu):
+        # TODO: Keep metadata
         data_range = self._parse_datarange(hdu.header['DATASEC'])
         combined_range = self._parse_datarange(hdu.header['DETSEC'])
         for in_row, out_row in zip(

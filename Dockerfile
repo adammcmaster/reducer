@@ -21,8 +21,6 @@ RUN pip install -r requirements.txt
 
 WORKDIR /src
 
-ADD reduce.py /src/
-ADD main.py /src/
-ADD tile.py /src/
+COPY src/ /src/
 
 ENTRYPOINT [ "/src/main.py" ]

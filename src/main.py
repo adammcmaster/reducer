@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-import tile
+from reducer import tile
 
 for filename in os.listdir('/data/'):
     if not filename.endswith('.fz'):
