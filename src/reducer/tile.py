@@ -5,6 +5,7 @@ import re
 class Tiler:
     hdu_list = []
     combined_data = None
+    combined_headers = astropy.io.fits.Header()
 
     def __init__(self, filename=None):
         if filename:
@@ -19,7 +20,10 @@ class Tiler:
         map(self._add_hdu, self.hdu_list[1:])
 
     def write(self, filename):
-        hdu_out = astropy.io.fits.PrimaryHDU(self.combined_data)
+        hdu_out = astropy.io.fits.PrimaryHDU(
+            self.combined_data,
+            self.combined_headers
+        )
         hdu_list_out = astropy.io.fits.HDUList([hdu_out])
         hdu_list_out.writeto(filename)
 
@@ -47,7 +51,6 @@ class Tiler:
         )
 
     def _add_hdu(self, hdu):
-        # TODO: Keep metadata
         data_range = self._parse_datarange(hdu.header['DATASEC'])
         combined_range = self._parse_datarange(hdu.header['DETSEC'])
         for in_row, out_row in zip(
@@ -61,3 +64,25 @@ class Tiler:
                 self.combined_data[out_row-1][out_col-1] = (
                     hdu.data[in_row-1][in_col-1]
                 )
+
+        self._combine_headers(hdu.header)
+
+    # We want to keep any metadata fields that are the same for every HDU and
+    # discard any that differ
+    def _combine_headers(self, new_headers):
+        excluded_headers = (
+            'DETSIZE',
+            'BIASSEC',
+            'DATASEC'
+        )
+        for key, value in new_headers.items():
+            if key in excluded_headers:
+                continue
+
+            if (
+                key in self.combined_headers and
+                self.combined_headers[key] != value
+            ):
+                del self.combined_headers[key]
+            else:
+                self.combined_headers.setdefault(key, value)

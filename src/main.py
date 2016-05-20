@@ -9,4 +9,4 @@ for filename in os.listdir('/data/'):
 
     t = tile.Tiler(os.path.join('/data', filename))
     t.tile()
-    t.write(os.path.join('/data', filename.replace('.fits.fz', '_output.fits')))
+    t.write(os.path.join('/data/out', filename.replace('.fits.fz', '_output.fits')))
