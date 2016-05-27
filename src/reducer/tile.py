@@ -2,30 +2,16 @@ import astropy.io.fits
 import numpy
 import re
 
-class Tiler:
-    hdu_list = []
+from reducer.fits import FitsWrapper
+
+class Tiler(FitsWrapper):
     combined_data = None
     combined_headers = astropy.io.fits.Header()
-
-    def __init__(self, filename=None):
-        if filename:
-            self.open(filename)
-
-    def open(self, filename):
-        self.hdu_list = astropy.io.fits.open(filename)
 
     def tile(self):
         detsize = self._parse_datarange(self.hdu_list[0].header['DETSIZE'])
         self.combined_data = self._mkndarray(detsize)
         map(self._add_hdu, self.hdu_list[1:])
-
-    def write(self, filename):
-        hdu_out = astropy.io.fits.PrimaryHDU(
-            self.combined_data,
-            self.combined_headers
-        )
-        hdu_list_out = astropy.io.fits.HDUList([hdu_out])
-        hdu_list_out.writeto(filename)
 
     def _parse_datarange(self, range_string):
         m = re.match(

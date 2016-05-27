@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from reducer import tile
+from reducer import tile, align
 
 for filename in os.listdir('/data/'):
     if not filename.endswith('.fz'):
