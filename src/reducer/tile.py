@@ -4,6 +4,7 @@ import re
 
 from reducer.fits import FitsWrapper
 
+# Takes a mosaic FITS file and creates a flat image
 class Tiler(FitsWrapper):
     combined_data = None
     combined_headers = astropy.io.fits.Header()
@@ -11,6 +12,7 @@ class Tiler(FitsWrapper):
     def tile(self):
         detsize = self._parse_datarange(self.hdu_list[0].header['DETSIZE'])
         self.combined_data = self._mkndarray(detsize)
+        self._combine_headers(self.hdu_list[0].header)
         map(self._add_hdu, self.hdu_list[1:])
 
     def _parse_datarange(self, range_string):
