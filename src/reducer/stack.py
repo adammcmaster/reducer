@@ -1,0 +1,2 @@
+class Stacker:
+    pass
