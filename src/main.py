@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
 import os
+import progressbar
 from reducer import tile, stack
 
 files = []
 
+bar = progressbar.ProgressBar()
 # Flatten mosaics
-for filename in os.listdir('/data/'):
+print "Loading and flattening files..."
+for filename in bar(os.listdir('/data/')):
     if not filename.endswith('.fz'):
         continue
 
@@ -16,6 +19,9 @@ for filename in os.listdir('/data/'):
 
 # Stack everything
 s = stack.Stacker(files[0])
-map(s.stack, files[1:])
+bar = progressbar.ProgressBar()
+print "Stacking files..."
+for f in bar(files[1:]):
+    s.stack(f)
 
 s.write(os.path.join('/', 'data', 'out', 'result.fits'))
