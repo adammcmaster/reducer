@@ -6,6 +6,11 @@ from reducer.fits import FitsWrapper
 # Takes a mosaic FITS file and creates a flat image
 class Tiler(FitsWrapper):
     combined_data = None
+    excluded_headers = [
+        'DETSIZE',
+        'BIASSEC',
+        'DATASEC'
+    ]
 
     def tile(self):
         detsize = self._parse_datarange(self.hdu_list[0].header['DETSIZE'])
@@ -55,13 +60,8 @@ class Tiler(FitsWrapper):
     # We want to keep any metadata fields that are the same for every HDU and
     # discard any that differ
     def _combine_headers(self, new_headers):
-        excluded_headers = (
-            'DETSIZE',
-            'BIASSEC',
-            'DATASEC'
-        )
         for key, value in new_headers.items():
-            if key in excluded_headers:
+            if key in self.excluded_headers:
                 continue
 
             if (
@@ -69,5 +69,6 @@ class Tiler(FitsWrapper):
                 self.header[key] != value
             ):
                 del self.header[key]
+                self.excluded_headers.append(key)
             else:
                 self.header.setdefault(key, value)

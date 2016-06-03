@@ -2,14 +2,15 @@ import astropy.io.fits
 
 # Wrapper around astropy's FITS class. Can be initialised with the filename of
 # a FITS file, or with another FitsWrapper object.
-class FitsWrapper:
+class FitsWrapper(object):
     hdu_list = []
     header = astropy.io.fits.Header()
 
     def __init__(self, in_file=None):
         if in_file:
             if isinstance(in_file, FitsWrapper):
-                self.hdu_list = list(in_file.hdu_list)
+                self.hdu_list = astropy.io.fits.HDUList(in_file.hdu_list)
+                self.header = astropy.io.fits.Header(in_file.header)
             else:
                 self.open(in_file)
 
