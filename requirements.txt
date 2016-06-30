@@ -4,5 +4,5 @@ ccdproc
 numpy<1.7.0
 progressbar
 git+https://github.com/astrofrog/reproject.git
-bottleneck
+bottleneck>=1.0,<1.1
 astropy>=1.1,<1.2
